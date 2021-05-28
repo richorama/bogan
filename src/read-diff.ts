@@ -1,11 +1,5 @@
 const chunkSize = 0xfff
 
-interface IMatch {
-  sourcePosition: number
-  referencePosition: number
-  length: number
-}
-
 const toUInt16 = (values: Uint8Array) => {
   if (values.length !== 2) throw new Error(`expected 2 items, got ${values.length}`)
   return new Uint16Array(values.buffer)[0]

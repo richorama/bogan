@@ -63,7 +63,7 @@ const maskMatch = (mask: boolean[], match: IMatch) => {
 
 const zeroArray = (length: number) => [...new Array(length)].map(() => 0)
 
-const generateDiff = (reference: Uint8Array, source: Uint8Array) => {
+const writeDiff = (reference: Uint8Array, source: Uint8Array) => {
   let output: number[] = []
   let chunkIndex = 0
   if (reference.length < source.length) {
@@ -111,4 +111,4 @@ const generateChunk = (referenceChunk: Uint8Array, sourceChunk: Uint8Array) => {
   return output
 }
 
-export default generateDiff
+export default writeDiff

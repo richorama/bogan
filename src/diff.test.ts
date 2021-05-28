@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
-import generateDiff from './DiffCreator'
-import readDiff from './DiffReader'
+import writeDiff from './write-diff'
+import readDiff from './read-diff'
 import expect from 'expect.js'
 
 describe('DiffCreator', function () {
@@ -8,7 +8,7 @@ describe('DiffCreator', function () {
     const reference = (await fs.readFile('./test-data/v22.bin')).slice(0, 800)
     const source = (await fs.readFile('./test-data/v24.bin')).slice(0, 800)
 
-    const diff = generateDiff(reference, source)
+    const diff = writeDiff(reference, source)
     const source2 = readDiff(diff, reference)
 
     expect(source2.length).to.be(source.length)
@@ -24,7 +24,7 @@ describe('DiffCreator', function () {
     const reference = (await fs.readFile('./test-data/v24.bin')).slice(0, 1000)
     const source = (await fs.readFile('./test-data/v22.bin')).slice(0, 1000)
 
-    const diff = generateDiff(reference, source)
+    const diff = writeDiff(reference, source)
     const source2 = readDiff(diff, reference)
 
     expect(source2.length).to.be(source.length)
@@ -39,7 +39,7 @@ describe('DiffCreator', function () {
     const reference = (await fs.readFile('./test-data/v22.bin')).slice(0, 0xfff + 1000)
     const source = (await fs.readFile('./test-data/v24.bin')).slice(0, 0xfff + 1000)
 
-    const diff = generateDiff(reference, source)
+    const diff = writeDiff(reference, source)
     const source2 = readDiff(diff, reference)
 
     expect(source2.length).to.be(source.length)
@@ -54,7 +54,7 @@ describe('DiffCreator', function () {
     const reference = (await fs.readFile('./test-data/v22.bin')).slice(0, 5000)
     const source = (await fs.readFile('./test-data/v24.bin')).slice(0, 8000)
 
-    const diff = generateDiff(reference, source)
+    const diff = writeDiff(reference, source)
     const source2 = readDiff(diff, reference)
 
     expect(source2.length).to.be(source.length)
@@ -69,7 +69,7 @@ describe('DiffCreator', function () {
     const reference = (await fs.readFile('./test-data/v22.bin')).slice(0, 8000)
     const source = (await fs.readFile('./test-data/v24.bin')).slice(0, 5000)
 
-    const diff = generateDiff(reference, source)
+    const diff = writeDiff(reference, source)
     const source2 = readDiff(diff, reference)
 
     expect(source2.length).to.be(source.length)
