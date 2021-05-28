@@ -51,8 +51,8 @@ describe('DiffCreator', function () {
   })
 
   it('calculates with a smaller reference', async function () {
-    const reference = (await fs.readFile('./test-data/v22.bin')).slice(0, 5000)
-    const source = (await fs.readFile('./test-data/v24.bin')).slice(0, 8000)
+    const reference = (await fs.readFile('./test-data/v22.bin')).slice(0, 3000)
+    const source = (await fs.readFile('./test-data/v24.bin')).slice(0, 4000)
 
     const diff = writeDiff(reference, source)
     const source2 = readDiff(diff, reference)
