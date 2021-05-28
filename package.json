@@ -1,0 +1,29 @@
+{
+  "name": "bogan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "rm -rf ./dist && tsc && node dist/app.js",
+    "build": "rm -rf ./dist && tsc",
+    "format": "prettier --write src",
+    "test": "rm -rf ./dist && tsc && mocha \"./dist/**/*.test.js\" --recursive"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.6.1",
+    "expect.js": "^0.3.1",
+    "mocha": "^8.2.1",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.5"
+  },
+  "prettier": {
+    "trailingComma": "none",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  }
+}
