@@ -66,6 +66,7 @@ describe('DiffCreator', function () {
   })
 
   it('calculates with a larger reference', async function () {
+    this.timeout(20000)
     const reference = (await fs.readFile('../test-data/v22.bin')).slice(0, 8000)
     const source = (await fs.readFile('../test-data/v24.bin')).slice(0, 5000)
 
