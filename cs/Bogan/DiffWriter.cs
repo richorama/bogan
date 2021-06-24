@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Bogan
 {
-  public struct Match
+  struct Match
   {
     public Match(int sourcePosition, int referencePosition, int length)
     {
@@ -18,34 +18,7 @@ namespace Bogan
     public int Length { get; set; }
   }
 
-  public static class Extensions
-  {
-    public static void AddUInt16(this List<byte> list, int value)
-    {
-      list.Add((byte)(value & 0x000000ff));
-      list.Add((byte)((value & 0x0000ff00) >> 8));
-    }
-
-    public static void MaskMatch(this List<bool> mask, Match match)
-    {
-      for (var i = 0; i < match.Length; i++)
-      {
-        mask[i + match.SourcePosition] = true;
-      }
-    }
-
-    public static void Set<T>(this List<T> list, int index, T value)
-    {
-      while (list.Count <= index)
-      {
-        list.Add(default(T));
-      }
-      list[index] = value;
-    }
-
-  }
-
-
+ 
   public class DiffWriter
   {
     const int chunkSize = 0xfff;
@@ -53,15 +26,17 @@ namespace Bogan
     const int minMatchSize = 8;
 
 
-    Match FindNextMatch(List<byte> reference, List<byte> source, List<bool> mask)
+    Match FindNextMatch(List<byte> source, List<byte> reference, List<bool> mask)
     {
+      if (source.Count != mask.Count) throw new ArgumentException($"{source.Count}, {mask.Count}");
+
       var sourcePosition = 0;
       var referencePosition = 0;
       var length = 0;
-      for (var sourceIndex = 0; sourceIndex < source.Count; sourceIndex++)
+      for (var sourceIndex = 0; sourceIndex + maxMatchSize < source.Count; sourceIndex++)
       {
         if (mask[sourceIndex]) continue;
-        for (var referenceIndex = 0; referenceIndex < reference.Count; referenceIndex++)
+        for (var referenceIndex = 0; referenceIndex + maxMatchSize < reference.Count; referenceIndex++)
         {
           var thisLength = 0;
           for (var windowIndex = 0; windowIndex < maxMatchSize && sourceIndex + windowIndex < source.Count && referenceIndex + windowIndex < reference.Count; windowIndex++)
@@ -125,10 +100,8 @@ namespace Bogan
     {
       var refBytes = new List<byte>();
       refBytes.AddRange(reference);
-      while (refBytes.Count < source.Count)
-      {
-        refBytes.Add(0);
-      }
+      var missingBytes = Enumerable.Range(0, Math.Max(0, source.Count - refBytes.Count)).Select(_ => (byte)0);
+      refBytes.AddRange(missingBytes);
 
       var chunkIndex = 0;
       while (chunkIndex < source.Count)

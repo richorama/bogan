@@ -34,7 +34,7 @@ namespace Bogan
 
           for (var j = 0; j < length; j++)
           {
-            chunk.Set(sourcePosition + j, reference[(chunkIndex * chunkSize) + referencePosition + j]);
+            chunk.Set(sourcePosition + j, reference.Get((chunkIndex * chunkSize) + referencePosition + j));
             mask[sourcePosition + j] = true;
           }
           positionsFilled += length;
@@ -46,7 +46,6 @@ namespace Bogan
         {
           if (mask[i]) continue;
           chunk.Set(i, diffArray[position]);
-          // chunk[i] = diffArray[position];
           position += 1;
           trailersAdded += 1;
         }
