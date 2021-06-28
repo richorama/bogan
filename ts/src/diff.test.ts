@@ -127,4 +127,23 @@ describe('DiffCreator', function () {
       expect(source[i]).to.be(source2[i])
     }
   })
+
+  it('calculates a diff on identical versions', async function () {
+    const reference = (await fs.readFile('../test-data/v22.bin')).slice(0, 800)
+    const source = (await fs.readFile('../test-data/v22.bin')).slice(0, 800)
+
+    const diff = writeDiff(reference, source)
+    const source2 = readDiff(diff, reference)
+
+    expect(source2.length).to.be(source.length)
+    for (let i = 0; i < source.length; i++) {
+      expect(source[i]).to.be(source2[i])
+    }
+
+    console.log(
+      `${source.length} => ${diff.length} = ${
+        (100 * diff.length) / source.length
+      }%`
+    )
+  })
 })
