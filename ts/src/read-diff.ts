@@ -29,7 +29,8 @@ const readDiff = (diff: Uint8Array, reference: Uint8Array): Uint8Array => {
       position += 2
 
       for (let j = 0; j < length; j++) {
-        chunk[sourcePosition + j] = reference[(chunkIndex * chunkSize) + referencePosition + j] || 0
+        chunk[sourcePosition + j] =
+          reference[chunkIndex * chunkSize + referencePosition + j] || 0
         mask[sourcePosition + j] = true
       }
       positionsFilled += length
@@ -37,7 +38,11 @@ const readDiff = (diff: Uint8Array, reference: Uint8Array): Uint8Array => {
 
     const trailerSize = chunkSize - positionsFilled
     let trailersAdded = 0
-    for (let i = 0; i < chunkSize && trailersAdded < trailerSize && position < diff.length; i++) {
+    for (
+      let i = 0;
+      i < chunkSize && trailersAdded < trailerSize && position < diff.length;
+      i++
+    ) {
       if (mask[i]) continue
       chunk[i] = diff[position]
       position += 1
@@ -49,8 +54,6 @@ const readDiff = (diff: Uint8Array, reference: Uint8Array): Uint8Array => {
   }
 
   return new Uint8Array(output)
-
 }
-
 
 export default readDiff

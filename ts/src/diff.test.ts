@@ -16,9 +16,12 @@ describe('DiffCreator', function () {
       expect(source[i]).to.be(source2[i])
     }
 
-    console.log(`${source.length} => ${diff.length} = ${100 * diff.length / source.length}%`)
+    console.log(
+      `${source.length} => ${diff.length} = ${
+        (100 * diff.length) / source.length
+      }%`
+    )
   })
-
 
   it('calculates a diff swapped', async function () {
     const reference = (await fs.readFile('../test-data/v24.bin')).slice(0, 1000)
@@ -32,12 +35,22 @@ describe('DiffCreator', function () {
       expect(source[i]).to.be(source2[i])
     }
 
-    console.log(`${source.length} => ${diff.length} = ${100 * diff.length / source.length}%`)
+    console.log(
+      `${source.length} => ${diff.length} = ${
+        (100 * diff.length) / source.length
+      }%`
+    )
   })
 
   it('calculates a more than one chunk', async function () {
-    const reference = (await fs.readFile('../test-data/v22.bin')).slice(0, 0xfff + 1000)
-    const source = (await fs.readFile('../test-data/v24.bin')).slice(0, 0xfff + 1000)
+    const reference = (await fs.readFile('../test-data/v22.bin')).slice(
+      0,
+      0xfff + 1000
+    )
+    const source = (await fs.readFile('../test-data/v24.bin')).slice(
+      0,
+      0xfff + 1000
+    )
 
     const diff = writeDiff(reference, source)
     const source2 = readDiff(diff, reference)
@@ -47,7 +60,11 @@ describe('DiffCreator', function () {
       expect(source[i]).to.be(source2[i])
     }
 
-    console.log(`${source.length} => ${diff.length} = ${100 * diff.length / source.length}%`)
+    console.log(
+      `${source.length} => ${diff.length} = ${
+        (100 * diff.length) / source.length
+      }%`
+    )
   })
 
   it('calculates with a smaller reference', async function () {
@@ -62,7 +79,11 @@ describe('DiffCreator', function () {
       expect(source[i]).to.be(source2[i])
     }
 
-    console.log(`${source.length} => ${diff.length} = ${100 * diff.length / source.length}%`)
+    console.log(
+      `${source.length} => ${diff.length} = ${
+        (100 * diff.length) / source.length
+      }%`
+    )
   })
 
   it('calculates with a larger reference', async function () {
@@ -78,7 +99,11 @@ describe('DiffCreator', function () {
       expect(source[i]).to.be(source2[i])
     }
 
-    console.log(`${source.length} => ${diff.length} = ${100 * diff.length / source.length}%`)
+    console.log(
+      `${source.length} => ${diff.length} = ${
+        (100 * diff.length) / source.length
+      }%`
+    )
   })
 
   it('persist a diff', async function () {
@@ -93,14 +118,13 @@ describe('DiffCreator', function () {
     const reference = (await fs.readFile('../test-data/v22.bin')).slice(0, 800)
     const diff = Array.from(await fs.readFile('../test-data/22 to 24 cs.bin'))
 
-    const source2 = readDiff( new Uint8Array(diff), reference)
+    const source2 = readDiff(new Uint8Array(diff), reference)
 
     const source = (await fs.readFile('../test-data/v24.bin')).slice(0, 800)
-    
+
     expect(source2.length).to.be(source.length)
     for (let i = 0; i < source.length; i++) {
       expect(source[i]).to.be(source2[i])
     }
-
   })
 })
