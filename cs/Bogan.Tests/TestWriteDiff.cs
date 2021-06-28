@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -122,9 +123,16 @@ namespace Bogan.Tests
       {
         Assert.AreEqual(source[i], regeneratedSource[i], $"byte {i} does not match");
       }
-
     }
 
+    [TestMethod]
+    public void GenerateEntireFile()
+    {
+      var reference = File.ReadAllBytes("../../../../../test-data/v22.bin").ToList();
+      var source = File.ReadAllBytes("../../../../../test-data/v24.bin").ToList();
+
+      new DiffWriter().Generate(reference, source).ToList();
+    }
 
   }
 }

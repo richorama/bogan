@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bogan
 {
@@ -60,7 +61,7 @@ namespace Bogan
       return new Match(sourcePosition, referencePosition, length);
     }
 
-    IEnumerable<byte> GenerateChunk(List<byte> reference, List<byte> source)
+    List<byte> GenerateChunk(List<byte> reference, List<byte> source)
     {
       var mask = source.Select(_ => false).ToList();
       var matches = new List<Match>();
@@ -104,18 +105,26 @@ namespace Bogan
       refBytes.AddRange(missingBytes);
 
       var chunkIndex = 0;
+      var tasks = new List<Task<List<byte>>>();
       while (chunkIndex < source.Count)
       {
-        var output = GenerateChunk(
-          refBytes.GetRange(chunkIndex, Math.Min(chunkSize, refBytes.Count - chunkIndex)),
-          source.GetRange(chunkIndex, Math.Min(chunkSize, source.Count - chunkIndex)));
+        // keep a scoped copy of this variable
+        var refChunk = refBytes.GetRange(chunkIndex,  Math.Min(chunkSize, refBytes.Count - chunkIndex));
+        var sourceChunk = source.GetRange(chunkIndex, Math.Min(chunkSize, source.Count - chunkIndex));
+        var task = new TaskFactory().StartNew(() => GenerateChunk(refChunk, sourceChunk));
+        tasks.Add(task);
 
-        foreach (var b in output)
-        {
-          yield return b;
-        }
         chunkIndex += chunkSize;
       }
+      Task.WhenAll(tasks);
+      foreach (var task in tasks)
+      {
+        foreach (var value in task.Result)
+        {
+          yield return value;
+        }
+      }
+
     }
 
   }
