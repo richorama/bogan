@@ -106,17 +106,18 @@ namespace Bogan
 
       var chunkIndex = 0;
       var tasks = new List<Task<List<byte>>>();
+      var factory = new TaskFactory();
       while (chunkIndex < source.Count)
       {
         // keep a scoped copy of this variable
         var refChunk = refBytes.GetRange(chunkIndex,  Math.Min(chunkSize, refBytes.Count - chunkIndex));
         var sourceChunk = source.GetRange(chunkIndex, Math.Min(chunkSize, source.Count - chunkIndex));
-        var task = new TaskFactory().StartNew(() => GenerateChunk(refChunk, sourceChunk));
+        var task = factory.StartNew(() => GenerateChunk(refChunk, sourceChunk));
         tasks.Add(task);
 
         chunkIndex += chunkSize;
       }
-      Task.WhenAll(tasks);
+      Task.WhenAll(tasks).Wait();
       foreach (var task in tasks)
       {
         foreach (var value in task.Result)
