@@ -1,7 +1,9 @@
 const chunkSize = 0xfff
 
 const toUInt16 = (values: Uint8Array) => {
-  if (values.length !== 2) throw new Error(`expected 2 items, got ${values.length}`)
+  if (values.length !== 2) {
+    throw new Error(`expected 2 bytes, got ${values.length}`)
+  }
   return new Uint16Array(values.buffer)[0]
 }
 

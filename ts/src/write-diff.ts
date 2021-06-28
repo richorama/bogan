@@ -25,9 +25,9 @@ const findNextMatch = (source: Uint8Array, reference: Uint8Array, mask: boolean[
   let sourcePosition = 0
   let referencePosition = 0
   let length = 0
-  for (let sourceIndex = 0; sourceIndex < source.length; sourceIndex++) {
+  for (let sourceIndex = 0; sourceIndex + minMatchSize < source.length; sourceIndex++) {
     if (mask[sourceIndex]) continue
-    for (let referenceIndex = 0; referenceIndex < reference.length; referenceIndex++) {
+    for (let referenceIndex = 0; referenceIndex + minMatchSize < reference.length; referenceIndex++) {
       let thisLength = 0
       for (let windowIndex = 0; windowIndex < maxMatchSize && sourceIndex + windowIndex < source.length && referenceIndex + windowIndex < reference.length; windowIndex++) {
         if (mask[sourceIndex + windowIndex]) break
@@ -65,11 +65,11 @@ const zeroArray = (length: number) => [...new Array(length)].map(() => 0)
 
 const writeDiff = (reference: Uint8Array, source: Uint8Array) => {
   let output: number[] = []
-  let chunkIndex = 0
   if (reference.length < source.length) {
     reference = new Uint8Array([...reference, ...zeroArray(source.length - reference.length)])
   }
 
+  let chunkIndex = 0
   while (chunkIndex < source.length) {
     output = [...output, ...generateChunk(
       reference.slice(chunkIndex, Math.min(chunkIndex + chunkSize, reference.length)),

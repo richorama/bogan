@@ -80,4 +80,27 @@ describe('DiffCreator', function () {
 
     console.log(`${source.length} => ${diff.length} = ${100 * diff.length / source.length}%`)
   })
+
+  it('persist a diff', async function () {
+    const v22 = (await fs.readFile('../test-data/v22.bin')).slice(0, 800)
+    const v24 = (await fs.readFile('../test-data/v24.bin')).slice(0, 800)
+
+    const diff = writeDiff(v22, v24)
+    await fs.writeFile('../test-data/22 to 24 node.bin', Buffer.from(diff))
+  })
+
+  it('loads a persisted diff', async function () {
+    const reference = (await fs.readFile('../test-data/v22.bin')).slice(0, 800)
+    const diff = Array.from(await fs.readFile('../test-data/22 to 24 cs.bin'))
+
+    const source2 = readDiff( new Uint8Array(diff), reference)
+
+    const source = (await fs.readFile('../test-data/v24.bin')).slice(0, 800)
+    
+    expect(source2.length).to.be(source.length)
+    for (let i = 0; i < source.length; i++) {
+      expect(source[i]).to.be(source2[i])
+    }
+
+  })
 })

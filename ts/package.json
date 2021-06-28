@@ -7,7 +7,7 @@
     "start": "rm -rf ./dist && tsc && node dist/app.js",
     "build": "rm -rf ./dist && tsc",
     "format": "prettier --write src",
-    "test": "rm -rf ./dist && tsc && mocha \"./dist/**/*.test.js\" --recursive"
+    "test": "rm -rf ./dist && tsc && mocha \"./dist/**/*.test.js\" --recursive --timeout 10000"
   },
   "author": "",
   "license": "MIT",

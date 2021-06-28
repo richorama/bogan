@@ -33,10 +33,10 @@ namespace Bogan
       var sourcePosition = 0;
       var referencePosition = 0;
       var length = 0;
-      for (var sourceIndex = 0; sourceIndex + maxMatchSize < source.Count; sourceIndex++)
+      for (var sourceIndex = 0; sourceIndex + minMatchSize < source.Count; sourceIndex++)
       {
         if (mask[sourceIndex]) continue;
-        for (var referenceIndex = 0; referenceIndex + maxMatchSize < reference.Count; referenceIndex++)
+        for (var referenceIndex = 0; referenceIndex + minMatchSize < reference.Count; referenceIndex++)
         {
           var thisLength = 0;
           for (var windowIndex = 0; windowIndex < maxMatchSize && sourceIndex + windowIndex < source.Count && referenceIndex + windowIndex < reference.Count; windowIndex++)
