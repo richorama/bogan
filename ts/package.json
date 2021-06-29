@@ -25,5 +25,9 @@
     "semi": false,
     "singleQuote": true,
     "arrowParens": "avoid"
+  },
+  "dependencies": {
+    "@zip.js/zip.js": "^2.3.7",
+    "pako": "^2.0.3"
   }
 }

@@ -118,13 +118,20 @@ namespace Bogan
         chunkIndex += chunkSize;
       }
       Task.WhenAll(tasks).Wait();
+
+      var output = new List<byte>();
+
       foreach (var task in tasks)
       {
-        foreach (var value in task.Result)
-        {
-          yield return value;
-        }
+        output.AddRange(task.Result);
       }
+
+
+      var compressed = output.ToArray().Compress();
+
+      Console.WriteLine($"{output.Count} => {compressed.Length}");
+
+      return compressed;
 
     }
 

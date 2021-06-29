@@ -1,3 +1,5 @@
+import pako from 'pako'
+
 const maxMatchSize = 0xff
 const chunkSize = 0xfff
 const minMatchSize = 8
@@ -9,6 +11,9 @@ const appendUint16 = (output: number[], num: number) => {
   output.push(num & 0x000000ff)
   output.push((num & 0x0000ff00) >> 8)
 }
+
+const compress = (diff: Uint8Array) =>
+  pako.deflate(diff, { raw: true }) as Uint8Array
 
 interface IMatch {
   sourcePosition: number
@@ -106,7 +111,7 @@ const writeDiff = (reference: Uint8Array, source: Uint8Array) => {
     ]
     chunkIndex += chunkSize
   }
-  return new Uint8Array(output)
+  return compress(new Uint8Array(output))
 }
 
 const generateChunk = (referenceChunk: Uint8Array, sourceChunk: Uint8Array) => {

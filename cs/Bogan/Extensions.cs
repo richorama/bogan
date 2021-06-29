@@ -1,9 +1,33 @@
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 
 namespace Bogan
 {
   static class Extensions
   {
+
+    public static byte[] Compress(this byte[] data)
+    {
+      var output = new MemoryStream();
+      using (var dstream = new DeflateStream(output, CompressionLevel.Optimal))
+      {
+        dstream.Write(data, 0, data.Length);
+      }
+      return output.ToArray();
+    }
+
+    public static byte[] Decompress(this byte[] data)
+    {
+      var input = new MemoryStream(data);
+      var output = new MemoryStream();
+      using (var dstream = new DeflateStream(input, CompressionMode.Decompress))
+      {
+        dstream.CopyTo(output);
+      }
+      return output.ToArray();
+    }
+
     public static void AddUInt16(this List<byte> list, int value)
     {
       list.Add((byte)(value & 0x000000ff));

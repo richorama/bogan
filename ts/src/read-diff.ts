@@ -1,3 +1,5 @@
+import pako from 'pako'
+
 const chunkSize = 0xfff
 
 const toUInt16 = (values: Uint8Array) => {
@@ -9,10 +11,17 @@ const toUInt16 = (values: Uint8Array) => {
 
 const falseArray = (length: number) => [...new Array(length)].map(() => false)
 
-const readDiff = (diff: Uint8Array, reference: Uint8Array): Uint8Array => {
+const decompress = (diff: Uint8Array) =>
+  pako.inflate(diff, { raw: true }) as Uint8Array
+
+const readDiff = (
+  compressedDiff: Uint8Array,
+  reference: Uint8Array
+): Uint8Array => {
   let position = 0
   let chunkIndex = 0
   let output: number[] = []
+  const diff = decompress(compressedDiff)
 
   while (position < diff.length) {
     let chunk: number[] = []

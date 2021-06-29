@@ -12,7 +12,7 @@ namespace Bogan
       var position = 0;
       var chunkIndex = 0;
       var output = new List<byte>();
-      var diffArray = diff.ToArray();
+      var diffArray = diff.ToArray().Decompress();
 
       while (position < diffArray.Length)
       {
